@@ -26,7 +26,11 @@ public abstract class Weapon : MonoBehaviour
 
     public int GetShootDirection()
     {
-        return 1;
+        float shootDir = shooter.SpawnPoint.transform.position.x - shooter.SpawnPoint.parent.transform.position.x;
+        if (shootDir < 0)
+            return -1; //หันซ้าย
+        else
+            return 1;  //หันขวา  
     }
 }
 
