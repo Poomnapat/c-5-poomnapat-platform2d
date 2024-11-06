@@ -19,8 +19,25 @@ public class Player : Character, IShootable
     }
 
     public void Shoot()
-    {
+    {       
         Instantiate(Bullet, BulletSpawnPoint.position, Quaternion.identity);
         BulletTimer = BulletSpawnTime;
+        GameObject obj = Instantiate(Bullet, BulletSpawnPoint.position, Quaternion.identity);
+        Banana banana = obj.GetComponent<Banana>();
+        banana.Init(10, this);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            OnHitWith(enemy);
+        }
+    }
+
+    void OnHitWith(Enemy enemy)
+    {
+        TakeDamage(enemy.DamageHit);
     }
 }

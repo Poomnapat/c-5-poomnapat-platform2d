@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class Crocodile : Enemy, IShootable
@@ -11,11 +12,26 @@ public class Crocodile : Enemy, IShootable
     [field: SerializeField] public float BulletSpawnTime { get; set; }
     [field: SerializeField] public float BulletTimer { get; set; }
 
-    public void Update()
+    void Start()
     {
+        Init(30);
+        WaitTime = 0.0f;
+        ReloadTime = 5.0f;
+        DamageHit = 30;
+        attackRange = 6;
+        player = GameObject.FindObjectOfType<Player>();
+    }
+
+    public void Update()
+    {       
         BulletTimer -= Time.deltaTime;
 
         Behavior();
+    }
+
+    private void FixedUpdate()
+    {
+        WaitTime += Time.fixedDeltaTime;
     }
     public override void Behavior()
     {
@@ -29,8 +45,13 @@ public class Crocodile : Enemy, IShootable
     }
 
     public void Shoot()
-    {
-        Instantiate(Bullet, BulletSpawnPoint.position, Quaternion.identity);
-        BulletTimer = BulletSpawnTime;
+    {        
+            Instantiate(Bullet, BulletSpawnPoint.position, Quaternion.identity);
+            BulletTimer = BulletSpawnTime;
+            GameObject obj = Instantiate(Bullet, BulletSpawnPoint.position, Quaternion.identity);
+            Rock rock = obj.gameObject.GetComponent<Rock>();
+            rock.Init(20, this);
+
+            WaitTime = 0;        
     }
 }

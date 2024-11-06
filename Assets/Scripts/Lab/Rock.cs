@@ -3,31 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Rock : Weapon
-{
-    [SerializeField] private int damage;
-    public Animator anim;
-    public Rigidbody2D rb2d;
-    [SerializeField] private Vector2 force;
-    private void Start()
+{       
+    Rigidbody2D rb2d;
+    Vector2 force;
+    void Start()
     {
+        rb2d = GetComponent<Rigidbody2D>();
+        force = new Vector2(GetShootDirection() * 10, 100);
         Move();
-        Damage = 40;
+        Damage = 20;
     }
-
-    public Rock()
-    {
-        Damage = 40; 
-    }
+    
     public override void Move()
     {
+        rb2d.AddForce(force);
+            //Debug.Log($"Rock is moving by applying RigidBody force");                  
+    }
+   
+    public void OnHitWith (Character character)
+    {
+        if (character is Player)
         {
-            Debug.Log($"Rock is moving by applying RigidBody force");           
+            character.TakeDamage(this.Damage);
         }
     }
-    /*OnHitWith
-    public void OnHitWith(Character)
-    {
+    
 
-    }*/
+    
     
 }

@@ -10,9 +10,10 @@ public class Banana : Weapon
     private void Start()
     {
         Move();
-        Speed = 4;
+        Speed = 4.0f;
         Damage = 30;
     }
+
     public float Speed
     {
         get { return speed; }
@@ -24,20 +25,27 @@ public class Banana : Weapon
             scale.x *= 4;
             transform.localScale = scale;
         }
-    }
-
-    public Banana()
-    {
-        Damage = 30;
-    }
+    }   
     
     public override void Move()
     {
+        float newX = transform.position.x + speed * Time.fixedDeltaTime;
+        float newY = transform.position.y;
+        Vector2 newPosition = new Vector2(newX, newY);
+        transform.position = newPosition;
         Debug.Log($"Banana is move with speed {speed} using Transform");
     }
-    /*OnHitWith
-    public void OnHitWith(Character)
-    {
 
-    }*/
+    private void FixedUpdate()
+    {
+        
+    }
+
+    public void OnHitWith(Character character)
+    {
+        if (character is Enemy)
+        {
+            character.TakeDamage(this.Damage);
+        }
+    }
 }
